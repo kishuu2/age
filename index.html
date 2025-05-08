@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,6 +13,7 @@
             box-sizing: border-box;
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
         }
+
         body {
             min-height: 100vh;
             display: flex;
@@ -23,10 +25,12 @@
             color: #FFFFFF;
             transition: background 1s ease;
         }
+
         body.starry {
             background: #0F172A;
             overflow: hidden;
         }
+
         body.starry::before {
             content: '';
             position: fixed;
@@ -39,40 +43,49 @@
             animation: aurora 20s ease infinite;
             z-index: -2;
         }
+
         body.high-contrast {
             background: #0F172A;
         }
+
         body.high-contrast .glass-card {
             background: rgba(0, 0, 0, 0.8);
             border: 1px solid #FFFFFF;
         }
+
         body.high-contrast .custom-input {
             background: #000000;
             border-color: #FFFFFF;
             color: #FFFFFF;
         }
+
         body.high-contrast .custom-input:focus {
             border-color: #00FFFF;
             box-shadow: 0 0 20px #00FFFF;
         }
+
         body.high-contrast .input-label,
-        body.high-contrast .custom-input:focus + .input-label,
-        body.high-contrast .custom-input:not(:placeholder-shown) + .input-label {
+        body.high-contrast .custom-input:focus+.input-label,
+        body.high-contrast .custom-input:not(:placeholder-shown)+.input-label {
             color: #FFFFFF;
             background: #000000;
         }
+
         body.high-contrast .calculate-btn,
         body.high-contrast .toggle-btn {
             background: #00FFFF;
             color: #000000;
         }
+
         body.high-contrast .calculate-btn:hover,
         body.high-contrast .toggle-btn:hover {
             background: #FFFFFF;
         }
+
         body.high-contrast .result {
             color: #FFFFFF;
         }
+
         body.high-contrast .zodiac-card,
         body.high-contrast .celeb-card,
         body.high-contrast .affirmation-card,
@@ -80,79 +93,218 @@
             background: rgba(255, 255, 255, 0.2);
             color: #FFFFFF;
         }
+
         @keyframes pulseBg {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
+            0% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+
+            100% {
+                background-position: 0% 50%;
+            }
         }
+
         @keyframes aurora {
-            0% { transform: translateY(0); opacity: 0.3; }
-            50% { transform: translateY(-20vh); opacity: 0.5; }
-            100% { transform: translateY(0); opacity: 0.3; }
+            0% {
+                transform: translateY(0);
+                opacity: 0.3;
+            }
+
+            50% {
+                transform: translateY(-20vh);
+                opacity: 0.5;
+            }
+
+            100% {
+                transform: translateY(0);
+                opacity: 0.3;
+            }
         }
+
         @keyframes slideIn {
-            from { opacity: 0; transform: translateY(50px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
+
         @keyframes glow {
-            0% { box-shadow: 0 0 8px rgba(34, 211, 238, 0.5); }
-            50% { box-shadow: 0 0 20px rgba(34, 211, 238, 0.9); }
-            100% { box-shadow: 0 0 8px rgba(34, 211, 238, 0.5); }
+            0% {
+                box-shadow: 0 0 8px rgba(34, 211, 238, 0.5);
+            }
+
+            50% {
+                box-shadow: 0 0 20px rgba(34, 211, 238, 0.9);
+            }
+
+            100% {
+                box-shadow: 0 0 8px rgba(34, 211, 238, 0.5);
+            }
         }
+
         @keyframes holoGlow {
-            0% { filter: drop-shadow(0 0 5px #22D3EE); }
-            50% { filter: drop-shadow(0 0 15px #A855F7); }
-            100% { filter: drop-shadow(0 0 5px #22D3EE); }
+            0% {
+                filter: drop-shadow(0 0 5px #22D3EE);
+            }
+
+            50% {
+                filter: drop-shadow(0 0 15px #A855F7);
+            }
+
+            100% {
+                filter: drop-shadow(0 0 5px #22D3EE);
+            }
         }
+
         @keyframes ripple {
-            0% { transform: scale(0); opacity: 0.6; }
-            100% { transform: scale(4); opacity: 0; }
+            0% {
+                transform: scale(0);
+                opacity: 0.6;
+            }
+
+            100% {
+                transform: scale(4);
+                opacity: 0;
+            }
         }
+
         @keyframes particle {
-            0% { transform: translateY(0) scale(1); opacity: 0.8; }
-            100% { transform: translateY(-120vh) scale(0); opacity: 0; }
+            0% {
+                transform: translateY(0) scale(1);
+                opacity: 0.8;
+            }
+
+            100% {
+                transform: translateY(-120vh) scale(0);
+                opacity: 0;
+            }
         }
+
         @keyframes shootingStar {
-            0% { transform: translate(0, 0); opacity: 1; }
-            100% { transform: translate(200px, 200px); opacity: 0; }
+            0% {
+                transform: translate(0, 0);
+                opacity: 1;
+            }
+
+            100% {
+                transform: translate(200px, 200px);
+                opacity: 0;
+            }
         }
+
         @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            25% { transform: translateX(-6px); }
-            75% { transform: translateX(6px); }
+
+            0%,
+            100% {
+                transform: translateX(0);
+            }
+
+            25% {
+                transform: translateX(-6px);
+            }
+
+            75% {
+                transform: translateX(6px);
+            }
         }
+
         @keyframes scaleUp {
-            from { transform: scale(0.8); opacity: 0; }
-            to { transform: scale(1); opacity: 1; }
+            from {
+                transform: scale(0.8);
+                opacity: 0;
+            }
+
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
         }
+
         @keyframes bounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-5px); }
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-5px);
+            }
         }
+
         @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.02); }
-            100% { transform: scale(1); }
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.02);
+            }
+
+            100% {
+                transform: scale(1);
+            }
         }
+
         @keyframes keypressRipple {
-            0% { box-shadow: 0 0 0 0 rgba(34, 211, 238, 0.5); }
-            100% { box-shadow: 0 0 0 10px rgba(34, 211, 238, 0); }
+            0% {
+                box-shadow: 0 0 0 0 rgba(34, 211, 238, 0.5);
+            }
+
+            100% {
+                box-shadow: 0 0 0 10px rgba(34, 211, 238, 0);
+            }
         }
-        .glass-card {
-            background: rgba(15, 23, 42, 0.7);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            backdrop-filter: blur(40px);
-            box-shadow: 0 20px 80px rgba(0, 0, 0, 0.7);
-            border-radius: 2rem;
-            padding: 3rem;
-            max-width: 28rem;
-            width: 100%;
-            animation: slideIn 1.2s ease-out forwards;
+
+        @media screen and (min-width: 552px) {
+            .glass-card {
+                background: rgba(15, 23, 42, 0.7);
+                border: 1px solid rgba(255, 255, 255, 0.2);
+                backdrop-filter: blur(40px);
+                box-shadow: 0 20px 80px rgba(0, 0, 0, 0.7);
+                border-radius: 2rem;
+                padding: 3rem;
+                max-width: 100%;
+                display: grid;
+                animation: slideIn 1.2s ease-out forwards;
+            }
+            
+            .lay {
+                display: flex;
+                gap: 42px;
+            }
         }
+
+        @media screen and (max-width: 752px) {
+            .glass-card {
+                background: rgba(15, 23, 42, 0.7);
+                border: 1px solid rgba(255, 255, 255, 0.2);
+                backdrop-filter: blur(40px);
+                box-shadow: 0 20px 80px rgba(0, 0, 0, 0.7);
+                border-radius: 2rem;
+                padding: 3rem;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                max-width: 100%;
+                animation: slideIn 1.2s ease-out forwards;
+            }
+
+        }
+
         h1 {
             font-size: 3rem;
             font-weight: 800;
-            text-align: center;
+            text-align: justify;
             margin-bottom: 2.5rem;
             background: linear-gradient(to right, #22D3EE, #A855F7);
             -webkit-background-clip: text;
@@ -160,14 +312,17 @@
             color: transparent;
             animation: holoGlow 3s infinite;
         }
+
         .input-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 1rem;
         }
+
         .input-container {
             position: relative;
         }
+
         .custom-input {
             background: rgba(15, 23, 42, 0.7);
             border: 2px solid rgba(255, 255, 255, 0.2);
@@ -179,6 +334,7 @@
             text-align: center;
             transition: all 0.4s ease;
         }
+
         .custom-input:focus {
             outline: none;
             border-color: #22D3EE;
@@ -186,16 +342,20 @@
             transform: scale(1.03);
             animation: glow 1.5s infinite;
         }
+
         .custom-input:hover {
             border-color: #A5B4FC;
             transform: scale(1.05);
         }
+
         .custom-input.keypress {
             animation: keypressRipple 0.3s ease-out;
         }
+
         .custom-input::placeholder {
             color: transparent;
         }
+
         .input-label {
             position: absolute;
             top: 1rem;
@@ -205,8 +365,9 @@
             transition: all 0.3s ease;
             pointer-events: none;
         }
-        .custom-input:focus + .input-label,
-        .custom-input:not(:placeholder-shown) + .input-label {
+
+        .custom-input:focus+.input-label,
+        .custom-input:not(:placeholder-shown)+.input-label {
             top: -0.5rem;
             left: 1rem;
             font-size: 0.8rem;
@@ -214,17 +375,21 @@
             background: rgba(15, 23, 42, 0.9);
             padding: 0 0.25rem;
         }
+
         .custom-input::-webkit-inner-spin-button,
         .custom-input::-webkit-outer-spin-button {
             -webkit-appearance: none;
             margin: 0;
         }
+
         .custom-input {
             -moz-appearance: textfield;
         }
+
         .error-shake {
             animation: shake 0.4s ease-in-out;
         }
+
         .error-message {
             color: #F87171;
             font-size: 0.875rem;
@@ -232,6 +397,7 @@
             text-align: center;
             display: none;
         }
+
         .calculate-btn,
         .toggle-btn,
         .save-btn {
@@ -249,12 +415,14 @@
             position: relative;
             animation: holoGlow 3s infinite;
         }
+
         .calculate-btn:hover,
         .toggle-btn:hover,
         .save-btn:hover {
             background: linear-gradient(90deg, #A855F7, #22D3EE);
             transform: scale(1.05);
         }
+
         .toggle-btn {
             background: transparent;
             border: 2px solid #A855F7;
@@ -262,23 +430,28 @@
             font-weight: 600;
             display: none;
         }
+
         .toggle-btn:hover {
             background: rgba(168, 85, 247, 0.2);
             animation: bounce 0.3s ease;
         }
+
         .save-btn {
             background: transparent;
             border: 2px solid #22D3EE;
             color: #22D3EE;
             display: none;
         }
+
         .save-btn:hover {
             background: rgba(34, 211, 238, 0.2);
         }
+
         .ripple-button {
             position: relative;
             overflow: hidden;
         }
+
         .ripple {
             position: absolute;
             background: rgba(255, 255, 255, 0.4);
@@ -286,6 +459,7 @@
             animation: ripple 0.6s linear;
             pointer-events: none;
         }
+
         .particles {
             position: fixed;
             top: 0;
@@ -295,6 +469,7 @@
             pointer-events: none;
             z-index: -1;
         }
+
         .particle {
             position: absolute;
             width: 2px;
@@ -303,6 +478,7 @@
             border-radius: 50%;
             animation: particle 6s linear infinite;
         }
+
         .shooting-star {
             position: absolute;
             width: 4px;
@@ -311,8 +487,8 @@
             border-radius: 50%;
             animation: shootingStar 1s linear forwards;
         }
+
         .result {
-            text-align: center;
             font-size: 2rem;
             font-weight: 600;
             color: #CFFAFE;
@@ -321,9 +497,11 @@
             margin-top: 1.5rem;
             animation: holoGlow 3s infinite;
         }
+
         .result.show {
             opacity: 1;
         }
+
         .extra-info {
             max-height: 0;
             overflow: hidden;
@@ -333,9 +511,11 @@
             font-size: 1rem;
             text-align: center;
         }
+
         .extra-info.show {
             max-height: 400px;
         }
+
         .zodiac-card,
         .celeb-card,
         .affirmation-card,
@@ -348,7 +528,9 @@
             color: #A5B4FC;
             animation: scaleUp 0.5s ease-out;
             transition: transform 0.3s ease;
+            cursor: default;
         }
+
         .zodiac-card:hover,
         .celeb-card:hover,
         .affirmation-card:hover,
@@ -356,16 +538,20 @@
             transform: scale(1.05);
             background: rgba(255, 255, 255, 0.2);
         }
+
         .affirmation-card {
             border: 1px solid #A855F7;
             animation: pulse 2s infinite;
         }
+
         .milestone-timeline {
             margin-top: 1.5rem;
             text-align: left;
             color: #CFFAFE;
+            cursor: default;
             font-size: 0.9rem;
         }
+
         .milestone {
             background: rgba(255, 255, 255, 0.1);
             border-radius: 0.5rem;
@@ -376,9 +562,11 @@
             position: relative;
             transform-style: preserve-3d;
         }
+
         .milestone:hover {
             transform: scale(1.05) rotateX(5deg);
         }
+
         .milestone::before {
             content: '•';
             position: absolute;
@@ -386,10 +574,12 @@
             color: #22D3EE;
             font-size: 1.2rem;
         }
+
         .save-form {
             margin-top: 1rem;
             display: none;
         }
+
         .save-form input {
             background: rgba(15, 23, 42, 0.7);
             border: 2px solid rgba(255, 255, 255, 0.2);
@@ -400,11 +590,13 @@
             font-size: 0.9rem;
             margin-bottom: 0.5rem;
         }
+
         .save-form input:focus {
             outline: none;
             border-color: #22D3EE;
             box-shadow: 0 0 10px rgba(34, 211, 238, 0.8);
         }
+
         .saved-dates {
             width: 100%;
             background: rgba(15, 23, 42, 0.7);
@@ -415,10 +607,12 @@
             font-size: 0.9rem;
             margin-top: 0.5rem;
         }
+
         .saved-dates:focus {
             outline: none;
             border-color: #22D3EE;
         }
+
         canvas {
             position: fixed;
             top: 0;
@@ -428,51 +622,71 @@
         }
     </style>
 </head>
+
 <body>
     <div class="particles" id="particles"></div>
     <canvas id="confetti-canvas"></canvas>
     <div class="glass-card" data-tilt data-tilt-max="20" data-tilt-speed="400" data-tilt-perspective="800">
-       
-        <h1>Age Calculator</h1>
-        <div class="space-y-8">
-            <div class="input-grid">
-                <div class="input-container">
-                    <input type="number" id="day" placeholder=" " min="1" max="31" class="custom-input" required oninput="handleDayInput(this)" onkeypress="handleKeypress(this)" aria-label="Day">
-                    <label for="day" class="input-label">Day</label>
-                </div>
-                <div class="input-container">
-                    <input type="number" id="month" placeholder=" " min="1" max="12" class="custom-input" required oninput="handleMonthInput(this)" onkeypress="handleKeypress(this)" aria-label="Month">
-                    <label for="month" class="input-label">Month</label>
-                </div>
-                <div class="input-container">
-                    <input type="number" id="year" placeholder=" " min="1900" max="2025" class="custom-input" required oninput="handleYearInput(this)" onkeypress="handleKeypress(this)" aria-label="Year">
-                    <label for="year" class="input-label">Year</label>
+        <div>
+            <div class="space-y-8">
+                <h1>Age Calculator</h1>
+                <div class="lay">
+                    <div>
+                        <div class="input-grid">
+                            <div class="input-container">
+                                <input type="number" id="day" placeholder=" " min="1" max="31" class="custom-input"
+                                    required oninput="handleDayInput(this)" onkeypress="handleKeypress(this)"
+                                    aria-label="Day">
+                                <label for="day" class="input-label">Day</label>
+                            </div>
+                            <div class="input-container">
+                                <input type="number" id="month" placeholder=" " min="1" max="12" class="custom-input"
+                                    required oninput="handleMonthInput(this)" onkeypress="handleKeypress(this)"
+                                    aria-label="Month">
+                                <label for="month" class="input-label">Month</label>
+                            </div>
+                            <div class="input-container">
+                                <input type="number" id="year" placeholder=" " min="1900" max="2025"
+                                    class="custom-input" required oninput="handleYearInput(this)"
+                                    onkeypress="handleKeypress(this)" aria-label="Year">
+                                <label for="year" class="input-label">Year</label>
+                            </div>
+                        </div>
+                        <p id="error-message" class="error-message"></p>
+                        <button id="calculate-btn" onclick="calculateAge()"
+                            class="calculate-btn ripple-button animate-glow">Calculate Age</button>
+                        <button id="toggle-btn" onclick="toggleExtraInfo()" class="toggle-btn ripple-button">Show More
+                            Info</button>
+                        <button id="contrast-btn" onclick="toggleHighContrast()" class="toggle-btn ripple-button">High
+                            Contrast
+                            Mode</button>
+                        <button id="bg-toggle-btn" onclick="toggleBackground()" class="toggle-btn ripple-button">Starry
+                            Night
+                            Mode</button>
+                        <button id="save-btn" onclick="showSaveForm()" class="save-btn ripple-button">Save
+                            Birthday</button>
+                        <div id="save-form" class="save-form">
+                            <input type="text" id="nickname" placeholder="Enter nickname (e.g., My Birthday)"
+                                aria-label="Nickname for saved birthday">
+                            <button onclick="saveBirthday()" class="calculate-btn ripple-button">Confirm Save</button>
+                        </div>
+                        <select id="saved-dates" onchange="loadSelectedBirthday()" class="saved-dates">
+                            <option value="">Select a saved birthday</option>
+                        </select>
+                    </div>
+                    <div>
+                        <div id="result" class="result"></div>
+                        <div id="extra-info" class="extra-info">
+                            <div id="extra-age"></div>
+                            <div id="cosmic-age" class="cosmic-age"></div>
+                            <div id="zodiac" class="zodiac-card"></div>
+                            <div id="celeb" class="celeb-card"></div>
+                            <div id="affirmation" class="affirmation-card"></div>
+                        </div>
+                        <div id="milestone-timeline" class="milestone-timeline"></div>
+                    </div>
                 </div>
             </div>
-            <p id="error-message" class="error-message"></p>
-            <button id="calculate-btn" onclick="calculateAge()" class="calculate-btn ripple-button animate-glow">Calculate Age</button>
-            <button id="toggle-btn" onclick="toggleExtraInfo()" class="toggle-btn ripple-button">Show More Info</button>
-            <button id="contrast-btn" onclick="toggleHighContrast()" class="toggle-btn ripple-button">High Contrast Mode</button>
-            <button id="bg-toggle-btn" onclick="toggleBackground()" class="toggle-btn ripple-button">Starry Night Mode</button>
-            <button id="save-btn" onclick="showSaveForm()" class="save-btn ripple-button">Save Birthday</button>
-            <div id="save-form" class="save-form">
-                <input type="text" id="nickname" placeholder="Enter nickname (e.g., My Birthday)" aria-label="Nickname for saved birthday">
-                <button onclick="saveBirthday()" class="calculate-btn ripple-button">Confirm Save</button>
-            </div>
-            <select id="saved-dates" onchange="loadSelectedBirthday()" class="saved-dates">
-                <option value="">Select a saved birthday</option>
-            </select>
-        
-            <div id="result" class="result"></div>
-            <div id="extra-info" class="extra-info">
-                <div id="extra-age"></div>
-                <div id="cosmic-age" class="cosmic-age"></div>
-                <div id="zodiac" class="zodiac-card"></div>
-                <div id="celeb" class="celeb-card"></div>
-                <div id="affirmation" class="affirmation-card"></div>
-            </div>
-            <div id="milestone-timeline" class="milestone-timeline"></div>
-       
         </div>
     </div>
 
@@ -634,8 +848,8 @@
             ];
 
             const celeb = celebrities.find(c => c.date[0] === month && c.date[1] === day) ||
-                          celebrities.find(c => c.date[0] === month) ||
-                          { name: 'a Star', fact: 'Your birthday is unique!' };
+                celebrities.find(c => c.date[0] === month) ||
+                { name: 'a Star', fact: 'Your birthday is unique!' };
 
             const celebDiv = document.getElementById('celeb');
             celebDiv.textContent = `Celebrity Match: ${celeb.name} - ${celeb.fact}`;
@@ -889,4 +1103,5 @@
         };
     </script>
 </body>
+
 </html>
