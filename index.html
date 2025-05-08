@@ -1,0 +1,892 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modern Age Calculator</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.7.0/vanilla-tilt.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+        body {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(270deg, #0F172A, #1E3A8A, #2D1B4E);
+            background-size: 600% 600%;
+            animation: pulseBg 10s ease infinite;
+            color: #FFFFFF;
+            transition: background 1s ease;
+        }
+        body.starry {
+            background: #0F172A;
+            overflow: hidden;
+        }
+        body.starry::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(180deg, rgba(0, 255, 200, 0.2), rgba(168, 85, 247, 0.2));
+            opacity: 0.3;
+            animation: aurora 20s ease infinite;
+            z-index: -2;
+        }
+        body.high-contrast {
+            background: #0F172A;
+        }
+        body.high-contrast .glass-card {
+            background: rgba(0, 0, 0, 0.8);
+            border: 1px solid #FFFFFF;
+        }
+        body.high-contrast .custom-input {
+            background: #000000;
+            border-color: #FFFFFF;
+            color: #FFFFFF;
+        }
+        body.high-contrast .custom-input:focus {
+            border-color: #00FFFF;
+            box-shadow: 0 0 20px #00FFFF;
+        }
+        body.high-contrast .input-label,
+        body.high-contrast .custom-input:focus + .input-label,
+        body.high-contrast .custom-input:not(:placeholder-shown) + .input-label {
+            color: #FFFFFF;
+            background: #000000;
+        }
+        body.high-contrast .calculate-btn,
+        body.high-contrast .toggle-btn {
+            background: #00FFFF;
+            color: #000000;
+        }
+        body.high-contrast .calculate-btn:hover,
+        body.high-contrast .toggle-btn:hover {
+            background: #FFFFFF;
+        }
+        body.high-contrast .result {
+            color: #FFFFFF;
+        }
+        body.high-contrast .zodiac-card,
+        body.high-contrast .celeb-card,
+        body.high-contrast .affirmation-card,
+        body.high-contrast .milestone {
+            background: rgba(255, 255, 255, 0.2);
+            color: #FFFFFF;
+        }
+        @keyframes pulseBg {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        @keyframes aurora {
+            0% { transform: translateY(0); opacity: 0.3; }
+            50% { transform: translateY(-20vh); opacity: 0.5; }
+            100% { transform: translateY(0); opacity: 0.3; }
+        }
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(50px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes glow {
+            0% { box-shadow: 0 0 8px rgba(34, 211, 238, 0.5); }
+            50% { box-shadow: 0 0 20px rgba(34, 211, 238, 0.9); }
+            100% { box-shadow: 0 0 8px rgba(34, 211, 238, 0.5); }
+        }
+        @keyframes holoGlow {
+            0% { filter: drop-shadow(0 0 5px #22D3EE); }
+            50% { filter: drop-shadow(0 0 15px #A855F7); }
+            100% { filter: drop-shadow(0 0 5px #22D3EE); }
+        }
+        @keyframes ripple {
+            0% { transform: scale(0); opacity: 0.6; }
+            100% { transform: scale(4); opacity: 0; }
+        }
+        @keyframes particle {
+            0% { transform: translateY(0) scale(1); opacity: 0.8; }
+            100% { transform: translateY(-120vh) scale(0); opacity: 0; }
+        }
+        @keyframes shootingStar {
+            0% { transform: translate(0, 0); opacity: 1; }
+            100% { transform: translate(200px, 200px); opacity: 0; }
+        }
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-6px); }
+            75% { transform: translateX(6px); }
+        }
+        @keyframes scaleUp {
+            from { transform: scale(0.8); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+            100% { transform: scale(1); }
+        }
+        @keyframes keypressRipple {
+            0% { box-shadow: 0 0 0 0 rgba(34, 211, 238, 0.5); }
+            100% { box-shadow: 0 0 0 10px rgba(34, 211, 238, 0); }
+        }
+        .glass-card {
+            background: rgba(15, 23, 42, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(40px);
+            box-shadow: 0 20px 80px rgba(0, 0, 0, 0.7);
+            border-radius: 2rem;
+            padding: 3rem;
+            max-width: 28rem;
+            width: 100%;
+            animation: slideIn 1.2s ease-out forwards;
+        }
+        h1 {
+            font-size: 3rem;
+            font-weight: 800;
+            text-align: center;
+            margin-bottom: 2.5rem;
+            background: linear-gradient(to right, #22D3EE, #A855F7);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            animation: holoGlow 3s infinite;
+        }
+        .input-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+        }
+        .input-container {
+            position: relative;
+        }
+        .custom-input {
+            background: rgba(15, 23, 42, 0.7);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            color: #E5E7EB;
+            padding: 1rem 1.5rem;
+            border-radius: 0.75rem;
+            width: 100%;
+            font-size: 1.1rem;
+            text-align: center;
+            transition: all 0.4s ease;
+        }
+        .custom-input:focus {
+            outline: none;
+            border-color: #22D3EE;
+            box-shadow: 0 0 20px rgba(34, 211, 238, 0.8);
+            transform: scale(1.03);
+            animation: glow 1.5s infinite;
+        }
+        .custom-input:hover {
+            border-color: #A5B4FC;
+            transform: scale(1.05);
+        }
+        .custom-input.keypress {
+            animation: keypressRipple 0.3s ease-out;
+        }
+        .custom-input::placeholder {
+            color: transparent;
+        }
+        .input-label {
+            position: absolute;
+            top: 1rem;
+            left: 1.5rem;
+            color: #9CA3AF;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            pointer-events: none;
+        }
+        .custom-input:focus + .input-label,
+        .custom-input:not(:placeholder-shown) + .input-label {
+            top: -0.5rem;
+            left: 1rem;
+            font-size: 0.8rem;
+            color: #22D3EE;
+            background: rgba(15, 23, 42, 0.9);
+            padding: 0 0.25rem;
+        }
+        .custom-input::-webkit-inner-spin-button,
+        .custom-input::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+        .custom-input {
+            -moz-appearance: textfield;
+        }
+        .error-shake {
+            animation: shake 0.4s ease-in-out;
+        }
+        .error-message {
+            color: #F87171;
+            font-size: 0.875rem;
+            margin-top: 0.5rem;
+            text-align: center;
+            display: none;
+        }
+        .calculate-btn,
+        .toggle-btn,
+        .save-btn {
+            background: linear-gradient(90deg, #22D3EE, #A855F7);
+            border: none;
+            color: #FFFFFF;
+            font-weight: 700;
+            padding: 1rem 2rem;
+            border-radius: 0.75rem;
+            width: 100%;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 0.75rem;
+            position: relative;
+            animation: holoGlow 3s infinite;
+        }
+        .calculate-btn:hover,
+        .toggle-btn:hover,
+        .save-btn:hover {
+            background: linear-gradient(90deg, #A855F7, #22D3EE);
+            transform: scale(1.05);
+        }
+        .toggle-btn {
+            background: transparent;
+            border: 2px solid #A855F7;
+            color: #A855F7;
+            font-weight: 600;
+            display: none;
+        }
+        .toggle-btn:hover {
+            background: rgba(168, 85, 247, 0.2);
+            animation: bounce 0.3s ease;
+        }
+        .save-btn {
+            background: transparent;
+            border: 2px solid #22D3EE;
+            color: #22D3EE;
+            display: none;
+        }
+        .save-btn:hover {
+            background: rgba(34, 211, 238, 0.2);
+        }
+        .ripple-button {
+            position: relative;
+            overflow: hidden;
+        }
+        .ripple {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.4);
+            border-radius: 50%;
+            animation: ripple 0.6s linear;
+            pointer-events: none;
+        }
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+        .particle {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: rgba(34, 211, 238, 0.8);
+            border-radius: 50%;
+            animation: particle 6s linear infinite;
+        }
+        .shooting-star {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: #FFFFFF;
+            border-radius: 50%;
+            animation: shootingStar 1s linear forwards;
+        }
+        .result {
+            text-align: center;
+            font-size: 2rem;
+            font-weight: 600;
+            color: #CFFAFE;
+            opacity: 0;
+            transition: opacity 0.7s ease;
+            margin-top: 1.5rem;
+            animation: holoGlow 3s infinite;
+        }
+        .result.show {
+            opacity: 1;
+        }
+        .extra-info {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease;
+            margin-top: 1rem;
+            color: #CFFAFE;
+            font-size: 1rem;
+            text-align: center;
+        }
+        .extra-info.show {
+            max-height: 400px;
+        }
+        .zodiac-card,
+        .celeb-card,
+        .affirmation-card,
+        .cosmic-age {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 0.5rem;
+            padding: 0.75rem 1rem;
+            margin-top: 1rem;
+            font-size: 0.9rem;
+            color: #A5B4FC;
+            animation: scaleUp 0.5s ease-out;
+            transition: transform 0.3s ease;
+        }
+        .zodiac-card:hover,
+        .celeb-card:hover,
+        .affirmation-card:hover,
+        .cosmic-age:hover {
+            transform: scale(1.05);
+            background: rgba(255, 255, 255, 0.2);
+        }
+        .affirmation-card {
+            border: 1px solid #A855F7;
+            animation: pulse 2s infinite;
+        }
+        .milestone-timeline {
+            margin-top: 1.5rem;
+            text-align: left;
+            color: #CFFAFE;
+            font-size: 0.9rem;
+        }
+        .milestone {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 0.5rem;
+            padding: 0.5rem 1rem;
+            margin: 0.5rem 0;
+            animation: scaleUp 0.7s ease-out;
+            transition: transform 0.3s ease;
+            position: relative;
+            transform-style: preserve-3d;
+        }
+        .milestone:hover {
+            transform: scale(1.05) rotateX(5deg);
+        }
+        .milestone::before {
+            content: '•';
+            position: absolute;
+            left: -1rem;
+            color: #22D3EE;
+            font-size: 1.2rem;
+        }
+        .save-form {
+            margin-top: 1rem;
+            display: none;
+        }
+        .save-form input {
+            background: rgba(15, 23, 42, 0.7);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            color: #E5E7EB;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            width: 100%;
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+        .save-form input:focus {
+            outline: none;
+            border-color: #22D3EE;
+            box-shadow: 0 0 10px rgba(34, 211, 238, 0.8);
+        }
+        .saved-dates {
+            width: 100%;
+            background: rgba(15, 23, 42, 0.7);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            color: #E5E7EB;
+            padding: 0.5rem;
+            border-radius: 0.5rem;
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+        }
+        .saved-dates:focus {
+            outline: none;
+            border-color: #22D3EE;
+        }
+        canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            z-index: 10;
+        }
+    </style>
+</head>
+<body>
+    <div class="particles" id="particles"></div>
+    <canvas id="confetti-canvas"></canvas>
+    <div class="glass-card" data-tilt data-tilt-max="20" data-tilt-speed="400" data-tilt-perspective="800">
+       
+        <h1>Age Calculator</h1>
+        <div class="space-y-8">
+            <div class="input-grid">
+                <div class="input-container">
+                    <input type="number" id="day" placeholder=" " min="1" max="31" class="custom-input" required oninput="handleDayInput(this)" onkeypress="handleKeypress(this)" aria-label="Day">
+                    <label for="day" class="input-label">Day</label>
+                </div>
+                <div class="input-container">
+                    <input type="number" id="month" placeholder=" " min="1" max="12" class="custom-input" required oninput="handleMonthInput(this)" onkeypress="handleKeypress(this)" aria-label="Month">
+                    <label for="month" class="input-label">Month</label>
+                </div>
+                <div class="input-container">
+                    <input type="number" id="year" placeholder=" " min="1900" max="2025" class="custom-input" required oninput="handleYearInput(this)" onkeypress="handleKeypress(this)" aria-label="Year">
+                    <label for="year" class="input-label">Year</label>
+                </div>
+            </div>
+            <p id="error-message" class="error-message"></p>
+            <button id="calculate-btn" onclick="calculateAge()" class="calculate-btn ripple-button animate-glow">Calculate Age</button>
+            <button id="toggle-btn" onclick="toggleExtraInfo()" class="toggle-btn ripple-button">Show More Info</button>
+            <button id="contrast-btn" onclick="toggleHighContrast()" class="toggle-btn ripple-button">High Contrast Mode</button>
+            <button id="bg-toggle-btn" onclick="toggleBackground()" class="toggle-btn ripple-button">Starry Night Mode</button>
+            <button id="save-btn" onclick="showSaveForm()" class="save-btn ripple-button">Save Birthday</button>
+            <div id="save-form" class="save-form">
+                <input type="text" id="nickname" placeholder="Enter nickname (e.g., My Birthday)" aria-label="Nickname for saved birthday">
+                <button onclick="saveBirthday()" class="calculate-btn ripple-button">Confirm Save</button>
+            </div>
+            <select id="saved-dates" onchange="loadSelectedBirthday()" class="saved-dates">
+                <option value="">Select a saved birthday</option>
+            </select>
+        
+            <div id="result" class="result"></div>
+            <div id="extra-info" class="extra-info">
+                <div id="extra-age"></div>
+                <div id="cosmic-age" class="cosmic-age"></div>
+                <div id="zodiac" class="zodiac-card"></div>
+                <div id="celeb" class="celeb-card"></div>
+                <div id="affirmation" class="affirmation-card"></div>
+            </div>
+            <div id="milestone-timeline" class="milestone-timeline"></div>
+       
+        </div>
+    </div>
+
+    <script>
+        // Auto-focus navigation
+        function handleDayInput(input) {
+            const value = input.value;
+            if (value.length >= 2 && value >= 1 && value <= 31) {
+                document.getElementById('month').focus();
+            }
+        }
+
+        function handleMonthInput(input) {
+            const value = input.value;
+            if (value.length >= 2 && value >= 1 && value <= 12) {
+                document.getElementById('year').focus();
+            }
+        }
+
+        function handleYearInput(input) {
+            const value = input.value;
+            if (value.length >= 4 && value >= 1900 && value <= 2025) {
+                document.getElementById('calculate-btn').focus();
+            }
+        }
+
+        function handleKeypress(input) {
+            input.classList.add('keypress');
+            setTimeout(() => input.classList.remove('keypress'), 300);
+        }
+
+        // Age calculation
+        function calculateAge() {
+            const dayInput = document.getElementById('day');
+            const monthInput = document.getElementById('month');
+            const yearInput = document.getElementById('year');
+            const errorMessage = document.getElementById('error-message');
+            const resultDiv = document.getElementById('result');
+            const toggleBtn = document.getElementById('toggle-btn');
+            const extraInfo = document.getElementById('extra-info');
+            const saveBtn = document.getElementById('save-btn');
+            const saveForm = document.getElementById('save-form');
+
+            // Reset previous states
+            errorMessage.style.display = 'none';
+            dayInput.classList.remove('error-shake');
+            monthInput.classList.remove('error-shake');
+            yearInput.classList.remove('error-shake');
+            resultDiv.className = 'result';
+            extraInfo.className = 'extra-info';
+            toggleBtn.style.display = 'none';
+            saveBtn.style.display = 'none';
+            saveForm.style.display = 'none';
+
+            // Get input values
+            const day = parseInt(dayInput.value);
+            const month = parseInt(monthInput.value);
+            const year = parseInt(yearInput.value);
+
+            // Validation
+            if (isNaN(day) || isNaN(month) || isNaN(year)) {
+                showError('Please fill in all fields.', [dayInput, monthInput, yearInput]);
+                return;
+            }
+            if (month < 1 || month > 12) {
+                showError('Month must be between 1 and 12.', [monthInput]);
+                return;
+            }
+            if (year < 1900 || year > 2025) {
+                showError('Year must be between 1900 and 2025.', [yearInput]);
+                return;
+            }
+            const maxDays = new Date(year, month, 0).getDate();
+            if (day < 1 || day > maxDays) {
+                showError(`Day must be between 1 and ${maxDays}.`, [dayInput]);
+                return;
+            }
+
+            const birthdate = new Date(year, month - 1, day);
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+
+            if (birthdate > today) {
+                showError('Birthdate cannot be in the future.', [dayInput, monthInput, yearInput]);
+                return;
+            }
+            if (isNaN(birthdate.getTime())) {
+                showError('Invalid date.', [dayInput, monthInput, yearInput]);
+                return;
+            }
+
+            // Calculate age
+            let ageYears = today.getFullYear() - birthdate.getFullYear();
+            const monthDiff = today.getMonth() - birthdate.getMonth();
+            const dayDiff = today.getDate() - birthdate.getDate();
+            if (monthDiff < 0 || (monthDiff === 0 && dayDiff < 0)) {
+                ageYears--;
+            }
+
+            // Show results
+            const resultText = `You are ${ageYears} years old.`;
+            showResult(resultText);
+            toggleBtn.style.display = 'block';
+            saveBtn.style.display = 'block';
+            showExtraInfo(birthdate, ageYears);
+            showZodiac(month, day, ageYears);
+            showCelebrity(month, day);
+            showMilestones(ageYears);
+            showAffirmation(ageYears);
+            triggerConfetti();
+        }
+
+        function showExtraInfo(birthdate, ageYears) {
+            const extraAgeDiv = document.getElementById('extra-age');
+            const cosmicAgeDiv = document.getElementById('cosmic-age');
+            const diff = Date.now() - birthdate.getTime();
+            const ageMonths = Math.floor(diff / (1000 * 60 * 60 * 24 * 30.42));
+            const ageDays = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const ageHours = Math.floor(diff / (1000 * 60 * 60));
+            extraAgeDiv.textContent = `That's ${ageMonths} months, ${ageDays} days, or ${ageHours} hours!`;
+            const jupiterYear = 11.86; // Earth years
+            const cosmicAge = (ageYears / jupiterYear).toFixed(2);
+            cosmicAgeDiv.textContent = `In cosmic terms, you're ${cosmicAge} Jupiter years old!`;
+        }
+
+        function showZodiac(month, day, ageYears) {
+            const zodiacSigns = [
+                { sign: 'Capricorn', start: [12, 22], end: [1, 19], emoji: '♑', facts: ['Ambitious and disciplined.', 'Strong work ethic.'] },
+                { sign: 'Aquarius', start: [1, 20], end: [2, 18], emoji: '♒', facts: ['Innovative and free-spirited.', 'Thinks outside the box.'] },
+                { sign: 'Pisces', start: [2, 19], end: [3, 20], emoji: '♓', facts: ['Dreamy and empathetic.', 'Highly creative.'] },
+                { sign: 'Aries', start: [3, 21], end: [4, 19], emoji: '♈', facts: ['Bold and adventurous.', 'Loves challenges.'] },
+                { sign: 'Taurus', start: [4, 20], end: [5, 20], emoji: '♉', facts: ['Loyal and grounded.', 'Enjoys luxury.'] },
+                { sign: 'Gemini', start: [5, 21], end: [6, 20], emoji: '♊', facts: ['Curious and witty.', 'Great communicator.'] },
+                { sign: 'Cancer', start: [6, 21], end: [7, 22], emoji: '♋', facts: ['Nurturing and intuitive.', 'Deeply emotional.'] },
+                { sign: 'Leo', start: [7, 23], end: [8, 22], emoji: '♌', facts: ['Confident and charismatic.', 'Born to shine.'] },
+                { sign: 'Virgo', start: [8, 23], end: [9, 22], emoji: '♍', facts: ['Analytical and detail-oriented.', 'Seeks perfection.'] },
+                { sign: 'Libra', start: [9, 23], end: [10, 22], emoji: '♎', facts: ['Charming and balanced.', 'Loves harmony.'] },
+                { sign: 'Scorpio', start: [10, 23], end: [11, 21], emoji: '♏', facts: ['Passionate and mysterious.', 'Fearlessly driven.'] },
+                { sign: 'Sagittarius', start: [11, 22], end: [12, 21], emoji: '♐', facts: ['Adventurous and optimistic.', 'Seeks new horizons.'] }
+            ];
+
+            const zodiac = zodiacSigns.find(sign =>
+                (month === sign.start[0] && day >= sign.start[1]) ||
+                (month === sign.end[0] && day <= sign.end[1])
+            ) || zodiacSigns[0];
+
+            const zodiacDiv = document.getElementById('zodiac');
+            const randomFact = zodiac.facts[Math.floor(Math.random() * zodiac.facts.length)];
+            zodiacDiv.textContent = `Zodiac: ${zodiac.emoji} ${zodiac.sign} - ${randomFact}`;
+            return zodiac.sign;
+        }
+
+        function showCelebrity(month, day) {
+            const celebrities = [
+                { name: 'Beyoncé', date: [9, 4], fact: 'A global music icon!' },
+                { name: 'Leonardo DiCaprio', date: [11, 11], fact: 'Known for epic roles!' },
+                { name: 'Emma Watson', date: [4, 15], fact: 'A star and activist!' },
+                { name: 'Chris Hemsworth', date: [8, 11], fact: 'The mighty Thor!' }
+            ];
+
+            const celeb = celebrities.find(c => c.date[0] === month && c.date[1] === day) ||
+                          celebrities.find(c => c.date[0] === month) ||
+                          { name: 'a Star', fact: 'Your birthday is unique!' };
+
+            const celebDiv = document.getElementById('celeb');
+            celebDiv.textContent = `Celebrity Match: ${celeb.name} - ${celeb.fact}`;
+        }
+
+        function showAffirmation(ageYears) {
+            const affirmations = [
+                `Embrace your ${ageYears} years of wisdom and shine bright!`,
+                `At ${ageYears}, you're crafting a life full of meaning!`,
+                `Your ${ageYears} years make you unstoppable—keep soaring!`,
+                `With ${ageYears} of experience, you're a force of nature!`
+            ];
+            const affirmationDiv = document.getElementById('affirmation');
+            const randomAffirmation = affirmations[Math.floor(Math.random() * affirmations.length)];
+            affirmationDiv.textContent = `Affirmation: ${randomAffirmation}`;
+        }
+
+        function showMilestones(ageYears) {
+            const milestones = [
+                { age: 5, text: 'You likely started school, beginning your learning journey!' },
+                { age: 16, text: 'You might have gotten your driver’s license, hitting the road!' },
+                { age: 18, text: 'You became an adult, ready to conquer the world!' },
+                { age: 21, text: 'You celebrated your 21st, a milestone of freedom!' },
+                { age: 30, text: 'You entered your 30s, thriving in your prime!' },
+                { age: 50, text: 'You reached half a century, rich with wisdom!' }
+            ];
+
+            const timelineDiv = document.getElementById('milestone-timeline');
+            timelineDiv.innerHTML = '';
+            milestones.forEach(m => {
+                if (ageYears >= m.age) {
+                    const milestone = document.createElement('div');
+                    milestone.className = 'milestone';
+                    milestone.textContent = `Age ${m.age}: ${m.text}`;
+                    timelineDiv.appendChild(milestone);
+                }
+            });
+        }
+
+        function showError(message, inputs) {
+            const errorMessage = document.getElementById('error-message');
+            errorMessage.textContent = message;
+            errorMessage.style.display = 'block';
+            inputs.forEach(input => input.classList.add('error-shake'));
+        }
+
+        function showResult(text) {
+            const resultDiv = document.getElementById('result');
+            resultDiv.textContent = text;
+            resultDiv.className = 'result show';
+        }
+
+        // Toggle extra info
+        function toggleExtraInfo() {
+            const extraInfo = document.getElementById('extra-info');
+            const toggleBtn = document.getElementById('toggle-btn');
+            extraInfo.classList.toggle('show');
+            toggleBtn.textContent = extraInfo.classList.contains('show') ? 'Hide Info' : 'Show More Info';
+        }
+
+        // High contrast mode
+        function toggleHighContrast() {
+            document.body.classList.toggle('high-contrast');
+            const contrastBtn = document.getElementById('contrast-btn');
+            contrastBtn.textContent = document.body.classList.contains('high-contrast')
+                ? 'Normal Mode'
+                : 'High Contrast Mode';
+        }
+
+        // Background toggle
+        function toggleBackground() {
+            document.body.classList.toggle('starry');
+            const bgBtn = document.getElementById('bg-toggle-btn');
+            bgBtn.textContent = document.body.classList.contains('starry')
+                ? 'Gradient Mode'
+                : 'Starry Night Mode';
+        }
+
+        // Save birthday
+        function showSaveForm() {
+            const saveForm = document.getElementById('save-form');
+            saveForm.style.display = 'block';
+            document.getElementById('nickname').focus();
+        }
+
+        function saveBirthday() {
+            const nickname = document.getElementById('nickname').value.trim();
+            const day = parseInt(document.getElementById('day').value);
+            const month = parseInt(document.getElementById('month').value);
+            const year = parseInt(document.getElementById('year').value);
+
+            if (!nickname || isNaN(day) || isNaN(month) || isNaN(year)) {
+                showError('Please enter a nickname and valid date.', [
+                    document.getElementById('nickname'),
+                    document.getElementById('day'),
+                    document.getElementById('month'),
+                    document.getElementById('year')
+                ]);
+                return;
+            }
+
+            try {
+                let savedBirthdays = JSON.parse(localStorage.getItem('savedBirthdays') || '[]');
+                savedBirthdays.push({ nickname, day, month, year });
+                localStorage.setItem('savedBirthdays', JSON.stringify(savedBirthdays));
+                updateSavedDatesDropdown();
+                document.getElementById('save-form').style.display = 'none';
+                document.getElementById('nickname').value = '';
+            } catch (e) {
+                console.warn('Failed to save birthday:', e);
+            }
+        }
+
+        function updateSavedDatesDropdown() {
+            try {
+                const savedBirthdays = JSON.parse(localStorage.getItem('savedBirthdays') || '[]');
+                const dropdown = document.getElementById('saved-dates');
+                dropdown.innerHTML = '<option value="">Select a saved birthday</option>';
+                savedBirthdays.forEach((b, index) => {
+                    const option = document.createElement('option');
+                    option.value = index;
+                    option.textContent = `${b.nickname} (${b.day}/${b.month}/${b.year})`;
+                    dropdown.appendChild(option);
+                });
+            } catch (e) {
+                console.warn('Failed to update dropdown:', e);
+            }
+        }
+
+        function loadSelectedBirthday() {
+            const dropdown = document.getElementById('saved-dates');
+            const index = parseInt(dropdown.value);
+            if (isNaN(index)) return;
+
+            try {
+                const savedBirthdays = JSON.parse(localStorage.getItem('savedBirthdays') || '[]');
+                const b = savedBirthdays[index];
+                if (b) {
+                    document.getElementById('day').value = b.day;
+                    document.getElementById('month').value = b.month;
+                    document.getElementById('year').value = b.year;
+                    calculateAge();
+                }
+            } catch (e) {
+                console.warn('Failed to load birthday:', e);
+            }
+        }
+
+        // Ripple effect for buttons
+        document.querySelectorAll('.ripple-button').forEach(button => {
+            button.addEventListener('click', function (e) {
+                const ripple = document.createElement('span');
+                ripple.classList.add('ripple');
+                const rect = this.getBoundingClientRect();
+                const size = Math.max(rect.width, rect.height);
+                ripple.style.width = ripple.style.height = `${size}px`;
+                ripple.style.left = `${e.clientX - rect.left - size / 2}px`;
+                ripple.style.top = `${e.clientY - rect.top - size / 2}px`;
+                this.appendChild(ripple);
+                setTimeout(() => ripple.remove(), 600);
+            });
+        });
+
+        // Confetti animation
+        function triggerConfetti() {
+            const canvas = document.getElementById('confetti-canvas');
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            const ctx = canvas.getContext('2d');
+            const particles = [];
+            const colors = ['#22D3EE', '#A855F7', '#CFFAFE'];
+
+            for (let i = 0; i < 30; i++) {
+                particles.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height / 2,
+                    size: Math.random() * 4 + 2,
+                    speedX: Math.random() * 2 - 1,
+                    speedY: Math.random() * 2 + 1,
+                    color: colors[Math.floor(Math.random() * colors.length)]
+                });
+            }
+
+            let frameCount = 0;
+            function animate() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                particles.forEach(p => {
+                    ctx.fillStyle = p.color;
+                    ctx.beginPath();
+                    ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                    ctx.fill();
+                    p.x += p.speedX;
+                    p.y += p.speedY;
+                    p.size *= 0.99;
+                    p.speedY += 0.05;
+                });
+                frameCount++;
+                if (frameCount < 60) {
+                    requestAnimationFrame(animate);
+                } else {
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                }
+            }
+            animate();
+        }
+
+        // Particle and shooting star animation
+        function createParticles() {
+            const particlesContainer = document.getElementById('particles');
+            for (let i = 0; i < 50; i++) {
+                const particle = document.createElement('div');
+                particle.classList.add('particle');
+                particle.style.left = `${Math.random() * 100}%`;
+                particle.style.animationDelay = `${Math.random() * 6}s`;
+                particle.style.animationDuration = `${5 + Math.random() * 5}s`;
+                particlesContainer.appendChild(particle);
+            }
+            // Add occasional shooting stars
+            setInterval(() => {
+                if (Math.random() < 0.1) {
+                    const star = document.createElement('div');
+                    star.classList.add('shooting-star');
+                    star.style.left = `${Math.random() * 50}%`;
+                    star.style.top = `${Math.random() * 50}%`;
+                    particlesContainer.appendChild(star);
+                    setTimeout(() => star.remove(), 1000);
+                }
+            }, 2000);
+        }
+
+        // Load saved birthdate and initialize dropdown
+        function loadSavedBirthdate() {
+            try {
+                const saved = localStorage.getItem('birthdate');
+                if (saved) {
+                    const { day, month, year } = JSON.parse(saved);
+                    document.getElementById('day').value = day || '';
+                    document.getElementById('month').value = month || '';
+                    document.getElementById('year').value = year || '';
+                }
+                updateSavedDatesDropdown();
+            } catch (e) {
+                console.warn('Failed to load birthdate:', e);
+            }
+        }
+
+        // Initialize
+        window.onload = () => {
+            createParticles();
+            loadSavedBirthdate();
+        };
+    </script>
+</body>
+</html>
