@@ -265,6 +265,29 @@
             }
         }
 
+        @keyframes modalFadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.7);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        @keyframes modalShake {
+            0%, 100% {
+                transform: translateX(0);
+            }
+            25% {
+                transform: translateX(-10px);
+            }
+            75% {
+                transform: translateX(10px);
+            }
+        }
+
         @media screen and (min-width: 552px) {
             .glass-card {
                 background: rgba(15, 23, 42, 0.7);
@@ -298,7 +321,6 @@
                 max-width: 100%;
                 animation: slideIn 1.2s ease-out forwards;
             }
-
         }
 
         h1 {
@@ -388,14 +410,6 @@
 
         .error-shake {
             animation: shake 0.4s ease-in-out;
-        }
-
-        .error-message {
-            color: #F87171;
-            font-size: 0.875rem;
-            margin-top: 0.5rem;
-            text-align: center;
-            display: none;
         }
 
         .calculate-btn,
@@ -620,12 +634,119 @@
             pointer-events: none;
             z-index: 10;
         }
+
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(15, 23, 42, 0.7);
+            backdrop-filter: blur(10px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+        }
+
+        .modal-overlay.show {
+            display: flex;
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        .modal {
+            background: rgba(15, 23, 42, 0.8);
+            border: 2px solid #F87171;
+            backdrop-filter: blur(20px);
+            border-radius: 1rem;
+            padding: clamp(1.5rem, 5vw, 2rem);
+            max-width: clamp(20rem, 80vw, 24rem);
+            width: 100%;
+            text-align: center;
+            animation: modalFadeIn 0.4s ease-out, modalShake 0.4s ease-out;
+            box-shadow: 0 0 20px rgba(248, 113, 113, 0.5);
+        }
+
+        .modal-header {
+            font-size: clamp(1.5rem, 4vw, 1.8rem);
+            font-weight: 700;
+            color: #F87171;
+            margin-bottom: 1rem;
+            background: linear-gradient(to right, #F87171, #A855F7);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            animation: holoGlow 3s infinite;
+        }
+
+        .modal-message {
+            font-size: clamp(0.9rem, 2.5vw, 1rem);
+            color: #E5E7EB;
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-close-btn {
+            background: linear-gradient(90deg, #F87171, #A855F7);
+            border: none;
+            color: #FFFFFF;
+            font-weight: 700;
+            padding: clamp(0.8rem, 2.5vw, 1rem) 2rem;
+            border-radius: 0.75rem;
+            width: 100%;
+            font-size: clamp(0.9rem, 2.5vw, 1rem);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            animation: holoGlow 3s infinite;
+        }
+
+        .modal-close-btn:hover {
+            background: linear-gradient(90deg, #A855F7, #F87171);
+            transform: scale(1.05);
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 600px) {
+            .modal {
+                padding: 1.5rem;
+                max-width: 90vw;
+            }
+            .modal-header {
+                font-size: 1.5rem;
+            }
+            .modal-message {
+                font-size: 0.9rem;
+            }
+            .modal-close-btn {
+                padding: 0.8rem;
+                font-size: 0.9rem;
+            }
+        }
+
+        @media (min-width: 601px) and (max-width: 1024px) {
+            .modal {
+                max-width: 22rem;
+            }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
     </style>
 </head>
 
 <body>
     <div class="particles" id="particles"></div>
     <canvas id="confetti-canvas"></canvas>
+    <div class="modal-overlay" id="modal-overlay" role="dialog" aria-labelledby="modal-header" aria-describedby="modal-message">
+        <div class="modal">
+            <div class="modal-header" id="modal-header">Error</div>
+            <p class="modal-message" id="modal-message"></p>
+            <button class="modal-close-btn ripple-button" onclick="closeModal()">Close</button>
+        </div>
+    </div>
     <div class="glass-card" data-tilt data-tilt-max="20" data-tilt-speed="400" data-tilt-perspective="800">
         <div>
             <div class="space-y-8">
@@ -652,7 +773,6 @@
                                 <label for="year" class="input-label">Year</label>
                             </div>
                         </div>
-                        <p id="error-message" class="error-message"></p>
                         <button id="calculate-btn" onclick="calculateAge()"
                             class="calculate-btn ripple-button animate-glow">Calculate Age</button>
                         <button id="toggle-btn" onclick="toggleExtraInfo()" class="toggle-btn ripple-button">Show More
@@ -723,15 +843,15 @@
             const dayInput = document.getElementById('day');
             const monthInput = document.getElementById('month');
             const yearInput = document.getElementById('year');
-            const errorMessage = document.getElementById('error-message');
             const resultDiv = document.getElementById('result');
             const toggleBtn = document.getElementById('toggle-btn');
             const extraInfo = document.getElementById('extra-info');
             const saveBtn = document.getElementById('save-btn');
             const saveForm = document.getElementById('save-form');
+            const modalOverlay = document.getElementById('modal-overlay');
 
             // Reset previous states
-            errorMessage.style.display = 'none';
+            modalOverlay.classList.remove('show');
             dayInput.classList.remove('error-shake');
             monthInput.classList.remove('error-shake');
             yearInput.classList.remove('error-shake');
@@ -890,10 +1010,17 @@
         }
 
         function showError(message, inputs) {
-            const errorMessage = document.getElementById('error-message');
-            errorMessage.textContent = message;
-            errorMessage.style.display = 'block';
+            const modalOverlay = document.getElementById('modal-overlay');
+            const modalMessage = document.getElementById('modal-message');
+            modalMessage.textContent = message;
+            modalOverlay.classList.add('show');
             inputs.forEach(input => input.classList.add('error-shake'));
+            document.querySelector('.modal-close-btn').focus();
+        }
+
+        function closeModal() {
+            const modalOverlay = document.getElementById('modal-overlay');
+            modalOverlay.classList.remove('show');
         }
 
         function showResult(text) {
@@ -959,7 +1086,7 @@
                 document.getElementById('save-form').style.display = 'none';
                 document.getElementById('nickname').value = '';
             } catch (e) {
-                console.warn('Failed to save birthday:', e);
+                console.warn('Failed to save Mascot:', e);
             }
         }
 
@@ -1100,6 +1227,12 @@
         window.onload = () => {
             createParticles();
             loadSavedBirthdate();
+            // Close modal when clicking outside
+            document.getElementById('modal-overlay').addEventListener('click', (e) => {
+                if (e.target === document.getElementById('modal-overlay')) {
+                    closeModal();
+                }
+            });
         };
     </script>
 </body>
